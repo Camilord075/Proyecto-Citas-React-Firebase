@@ -77,6 +77,7 @@ const Login = () => {
     setTimeout(() => {
       setShowRegisterForm(!showRegisterForm);
       setIsAnimating(false);
+      // Limpiar los campos
       setLoginEmail('');
       setLoginPass('');
       setRegisterEmail('');
@@ -84,7 +85,7 @@ const Login = () => {
       setConfirmPass('');
       setRegisterName('');
       setRegisterLastName('');
-    }, 300);
+    }, 300); // Tiempo de la animación
   };
 
   return (

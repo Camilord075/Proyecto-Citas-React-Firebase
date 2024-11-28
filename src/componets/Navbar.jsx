@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { auth } from "../firebase"; // Asegúrate de importar correctamente tu archivo de configuración de Firebase
+import { auth } from "../firebase";
 import "./navbar.css";
 
 const Navbar = () => {
-  const [user, setUser] = useState(null); // Estado para el usuario autenticado
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Comprobar si el usuario está autenticado cuando el componente se monta
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       if (currentUser) {
-        // Recuperar el displayName si está disponible
         const { displayName } = currentUser;
         setUser({
-          name: displayName || "Usuario", // Si no hay nombre, usar un valor por defecto
+          name: displayName || "Usuario",
           email: currentUser.email,
         });
       } else {
@@ -21,19 +19,23 @@ const Navbar = () => {
       }
     });
 
-    // Limpiar el listener al desmontar el componente
     return () => unsubscribe();
   }, []);
 
   const handleLogout = () => {
-    auth.signOut(); // Cerrar sesión
-    setUser(null); // Restablecer el estado del usuario
+    auth.signOut();
+    setUser(null);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log("Buscando...");
   };
 
   return (
     <nav className="navbar navbar-expand-md navbar-dark" id="navbar">
       <a className="navbar-brand" href="#">
-        Navbar
+        DoctorOnTime
       </a>
       <button
         className="navbar-toggler d-lg-none"
@@ -48,17 +50,35 @@ const Navbar = () => {
         <ul className="navbar-nav me-auto mt-2 mt-lg-0">
           <li className="nav-item">
             <Link className="nav-link" to="/" aria-current="page">
-              Home
+              Inicio
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/admin">
-              Link
+              Citas
             </Link>
           </li>
         </ul>
-        
-        {/* Si el usuario está autenticado, mostramos su nombre y la opción para cerrar sesión */}
+
+
+        {user ? (
+          <form className="d-flex my-2 my-lg-0" onSubmit={handleSearch}>
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Buscar"
+              aria-label="Search"
+            />
+            <button className="btn btn-outline-light my-2 my-sm-0" type="submit">
+              Buscar
+            </button>
+          </form>
+        ) : (
+          <p className="text-light my-2 my-lg-0">
+
+          </p>
+        )}
+
         {user ? (
           <ul className="navbar-nav ml-auto">
             <li className="nav-item dropdown">
@@ -70,7 +90,7 @@ const Navbar = () => {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                {user.name} {/* Muestra el nombre del usuario */}
+                {user.name}
               </a>
               <div className="dropdown-menu" aria-labelledby="dropdownId">
                 <button className="dropdown-item" onClick={handleLogout}>
@@ -80,7 +100,6 @@ const Navbar = () => {
             </li>
           </ul>
         ) : (
-          // Si no hay usuario autenticado, mostramos el botón de login
           <form className="d-flex my-2 my-lg-0">
             <Link className="btn my-2 my-sm-0" id="login-button" to="/Login">
               Log in

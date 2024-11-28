@@ -1,4 +1,4 @@
-/* Contenedor de login */
+
 .login-container {
   display: flex;
   justify-content: center;
@@ -8,7 +8,7 @@
   padding: 10px;
 }
 
-/* Estilo del formulario */
+
 .login-form {
   background-color: #fff;
   padding: 30px;
@@ -17,16 +17,17 @@
   width: 100%;
   max-width: 400px;
   text-align: center;
-  transform: translateX(10%); /* Desplazamiento hacia la derecha */
-  transition: transform 0.5s ease-in-out; /* Animación más lenta */
+  transform: translateX(10%);
+  transition: transform 0.5s ease-in-out;
 }
 
 .login-form h2 {
   margin-bottom: 20px;
   font-size: 26px;
   color: #333;
-  transition: transform 0.5s ease-in-out; /* Animación aplicada al título */
+  transition: transform 0.5s ease-in-out;
 }
+
 
 .form-control {
   width: 100%;
@@ -44,6 +45,7 @@
   outline: none;
 }
 
+
 .remember-me {
   display: flex;
   align-items: center;
@@ -52,7 +54,7 @@
 }
 
 .remember-me input {
-  transform: scale(1.2); /* Agranda el checkbox */
+  transform: scale(1.2);
   margin-right: 8px;
 }
 
@@ -61,21 +63,24 @@
   color: #555;
 }
 
+
 .btn {
   width: 100%;
   padding: 15px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #4CAF50;
+  color: white;
   border: none;
   border-radius: 5px;
   font-size: 18px;
   cursor: pointer;
   margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
 
 .btn:hover {
-  background-color: #0056b3;
+  background-color: #388E3C;
 }
+
 
 .error {
   color: red;
@@ -89,12 +94,13 @@
   font-weight: bold;
 }
 
+
 .register-link {
   margin-top: 20px;
 }
 
 .register-link-text {
-  color: #007bff;
+  color: #2196F3; 
   text-decoration: none;
 }
 
@@ -102,18 +108,18 @@
   text-decoration: underline;
 }
 
-/* Animación de deslizamiento */
+
 .form-section {
   position: relative;
   overflow: hidden;
-  transition: transform 0.5s ease-in-out; /* Animación más lenta */
+  transition: transform 0.5s ease-in-out; 
 }
 
 .animating {
-  transform: translateY(-100%); /* Desliza el formulario hacia arriba o abajo */
+  transform: translateY(-100%); 
 }
 
-/* Responsividad */
+
 @media (max-width: 576px) {
   .login-form {
     width: 90%;
@@ -132,5 +138,10 @@
 
   .login-form h2 {
     font-size: 24px;
+  }
+
+
+  .register-link-text {
+    color: #FF7043;
   }
 }
