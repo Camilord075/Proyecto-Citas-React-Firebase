@@ -1,0 +1,116 @@
+/* Contenedor de login */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f7f7;
+    padding: 10px;
+  }
+  
+  /* Estilo del formulario */
+  .login-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .login-form h2 {
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: #333;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+  }
+  
+  .form-control:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .remember-me {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+  
+  .remember-me input {
+    transform: scale(1.2); /* Agranda el checkbox */
+    margin-right: 8px;
+  }
+  
+  .remember-me label {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .error {
+    color: red;
+    margin-bottom: 15px;
+  }
+  
+  .register-link {
+    margin-top: 20px;
+  }
+  
+  .register-link-text {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .register-link-text:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsividad */
+  @media (max-width: 576px) {
+    .login-form {
+      width: 90%;
+      padding: 20px;
+    }
+  
+    .btn {
+      font-size: 16px;
+      padding: 14px;
+    }
+  
+    .form-control {
+      font-size: 16px;
+      padding: 12px;
+    }
+  
+    .login-form h2 {
+      font-size: 24px;
+    }
+  }
+  
