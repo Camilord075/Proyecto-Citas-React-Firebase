@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import "../componets/apartadovisual/login.css";
 
@@ -8,14 +8,15 @@ const Login = () => {
   const [loginPass, setLoginPass] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPass, setRegisterPass] = useState('');
-  const [confirmPass, setConfirmPass] = useState(''); // Confirmación de contraseña
-  const [registerName, setRegisterName] = useState(''); // Nombre
-  const [registerLastName, setRegisterLastName] = useState(''); // Apellido
+  const [confirmPass, setConfirmPass] = useState('');
+  const [registerName, setRegisterName] = useState('');
+  const [registerLastName, setRegisterLastName] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [user, setUser] = useState(null); // Nuevo estado para almacenar la información del usuario
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -23,19 +24,30 @@ const Login = () => {
     setError(null);
     setSuccessMessage(null);
 
-    // Validar que las contraseñas coincidan
     if (registerPass !== confirmPass) {
       setError("Las contraseñas no coinciden");
       return;
     }
 
     try {
-      // Crear usuario con email y contraseña
+      // Crear usuario en Firebase Authentication
       const userCredential = await auth.createUserWithEmailAndPassword(registerEmail, registerPass);
       
-      // Actualizar el perfil del usuario con el nombre y apellido
+      // Asignar nombre completo
       await userCredential.user.updateProfile({
         displayName: `${registerName} ${registerLastName}`,
+      });
+
+      // Asignar el rol 'user' por defecto
+      const role = 'user'; 
+
+      // Guardar datos del usuario en Firestore, incluyendo el rol
+      await db.collection('Usuarios').doc(userCredential.user.uid).set({
+        email: registerEmail,
+        name: registerName,
+        lastName: registerLastName,
+        id: userCredential.user.uid,
+        role: role, // Rol asignado
       });
 
       setSuccessMessage("Cuenta creada exitosamente");
@@ -45,6 +57,10 @@ const Login = () => {
       setRegisterName('');
       setRegisterLastName('');
       setShowRegisterForm(false);
+
+      // Redirigir a la ruta principal después del registro
+      navigate('/'); 
+
     } catch (err) {
       setError(err.message);
       setSuccessMessage(null);
@@ -57,7 +73,22 @@ const Login = () => {
     setSuccessMessage(null);
 
     try {
-      await auth.signInWithEmailAndPassword(loginEmail, loginPass);
+      const userCredential = await auth.signInWithEmailAndPassword(loginEmail, loginPass);
+
+      // Obtener el documento del usuario desde Firestore
+      const userDoc = await db.collection('Usuarios').doc(userCredential.user.uid).get();
+      const userData = userDoc.data();
+
+      // Obtener el rol del usuario
+      const role = userData.role;
+
+      // Guardar la información del usuario y rol en el estado
+      setUser({
+        name: userCredential.user.displayName || "Usuario",
+        role: role, // Guardar el rol del usuario
+        email: userCredential.user.email,
+      });
+
       setSuccessMessage("¡Inicio de sesión exitoso!");
 
       if (rememberMe) {
@@ -66,7 +97,9 @@ const Login = () => {
         localStorage.removeItem("user");
       }
 
-      navigate('/'); // Redirigir al inicio después de login
+      // Redirigir a la ruta principal después del inicio de sesión
+      navigate('/'); 
+
     } catch (err) {
       setError("Correo o contraseña incorrectos");
     }
@@ -77,7 +110,7 @@ const Login = () => {
     setTimeout(() => {
       setShowRegisterForm(!showRegisterForm);
       setIsAnimating(false);
-      // Limpiar los campos
+      // Limpiar los campos del formulario
       setLoginEmail('');
       setLoginPass('');
       setRegisterEmail('');
@@ -85,7 +118,7 @@ const Login = () => {
       setConfirmPass('');
       setRegisterName('');
       setRegisterLastName('');
-    }, 300); // Tiempo de la animación
+    }, 300);
   };
 
   return (
@@ -97,7 +130,7 @@ const Login = () => {
         {error && <p className="error">{error}</p>}
 
         <div className={`form-section ${isAnimating ? "animating" : ""}`}>
-          {/* Formulario de Login */}
+          {/* Formulario de inicio de sesión */}
           {!showRegisterForm && (
             <form onSubmit={handleLogin}>
               <input
@@ -129,7 +162,7 @@ const Login = () => {
             </form>
           )}
 
-          {/* Formulario de Registro */}
+          {/* Formulario de registro */}
           {showRegisterForm && (
             <form onSubmit={handleRegister}>
               <input
@@ -172,12 +205,12 @@ const Login = () => {
                 onChange={(e) => setConfirmPass(e.target.value)}
                 required
               />
+
               <button type="submit" className="btn">Registrar</button>
             </form>
           )}
         </div>
 
-        {/* Enlace para alternar entre iniciar sesión y registro */}
         <div className="register-link">
           <span>
             {showRegisterForm ? "¿Ya tienes cuenta? " : "¿No tienes cuenta? "}
