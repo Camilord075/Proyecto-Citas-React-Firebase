@@ -5,11 +5,12 @@ import "./navbar.css";
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");  // Término de búsqueda
+  const [searchResults, setSearchResults] = useState([]);  // Resultados de búsqueda
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
       if (currentUser) {
-
         const userRef = db.collection("users").doc(currentUser.uid); 
         const doc = await userRef.get();
 
@@ -52,9 +53,42 @@ const Navbar = () => {
     setUser(null);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    console.log("Buscando...");
+
+    // Si no hay término de búsqueda, no hacer nada
+    if (!searchTerm.trim()) return;
+
+    try {
+      const citasRef = db.collection("citas");
+
+      // Realizar la consulta por especialidad
+      const snapshot = await citasRef
+        .where("estado", "==", "disponible")  // Solo buscar citas disponibles
+        .where("especialidad", "==", searchTerm)  // Buscar por especialidad
+        .get();
+
+      // Si no se encuentran citas por especialidad, buscar por doctor
+      if (snapshot.empty) {
+        const snapshotByDoctor = await citasRef
+          .where("estado", "==", "disponible")  // Solo buscar citas disponibles
+          .where("doctor", "==", searchTerm)  // Buscar por doctor
+          .get();
+
+        if (!snapshotByDoctor.empty) {
+          const results = snapshotByDoctor.docs.map(doc => doc.data());
+          setSearchResults(results);  // Mostrar resultados por doctor
+        } else {
+          setSearchResults([]);  // No se encontraron citas disponibles
+        }
+      } else {
+        const results = snapshot.docs.map(doc => doc.data());
+        setSearchResults(results);  // Mostrar resultados por especialidad
+      }
+    } catch (error) {
+      console.error("Error al realizar la búsqueda: ", error);
+      setSearchResults([]);  // En caso de error, mostrar un arreglo vacío
+    }
   };
 
   return (
@@ -90,8 +124,10 @@ const Navbar = () => {
             <input
               className="form-control me-2"
               type="search"
-              placeholder="Buscar"
+              placeholder="Buscar por especialidad o doctor"
               aria-label="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}  // Control de input
             />
             <button className="btn btn-outline-light my-2 my-sm-0" type="submit">
               Buscar
@@ -129,6 +165,20 @@ const Navbar = () => {
           </form>
         )}
       </div>
+
+      {/* Mostrar resultados de búsqueda debajo del campo de búsqueda */}
+      {searchResults.length > 0 && (
+        <div className="search-results">
+          <ul>
+            {searchResults.map((cita, index) => (
+              <li key={index}>
+                <h5>{cita.especialidad} - {cita.doctor}</h5>
+                <p>Fecha: {cita.fecha}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </nav>
   );
 };
