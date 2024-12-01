@@ -1,0 +1,63 @@
+/* Estilo general del footer */
+.footer {
+    background-color: #007BFF; /* Azul profesional */
+    color: #fff;
+    padding: 40px 20px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Contenedor principal */
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  /* Secciones del footer */
+  .footer-section {
+    flex: 1;
+    margin: 10px;
+    min-width: 200px;
+  }
+  
+  .footer-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+  
+  .footer-section p,
+  .footer-section ul {
+    font-size: 1rem;
+    margin: 5px 0;
+  }
+  
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-section ul li {
+    margin-bottom: 10px;
+  }
+  
+  .footer-section ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-section ul li a:hover {
+    color: #FFD700; /* Amarillo dorado para hover */
+  }
+  
+  /* Parte inferior del footer */
+  .footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 10px;
+  }
+  
