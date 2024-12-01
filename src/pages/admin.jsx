@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../componets/apartadovisual/admin.css";
 import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
@@ -171,7 +171,7 @@ const Admin = () => {
           {/* Formulario para agregar doctor */}
           <div>
             <h4>Agregar Doctor y Horario</h4>
-            <form onSubmit={handleAddDoctor}>
+            <form onSubmit={handleAddDoctor} id="form-citas">
               <input
                 type="text"
                 placeholder="Nombre del doctor"
@@ -193,7 +193,7 @@ const Admin = () => {
                 onChange={(e) => setDoctorHours(e.target.value)}
                 required
               />
-              <button type="submit">Agregar Doctor y Horario</button>
+              <button type="submit">Agregar horario</button>
             </form>
           </div>
 

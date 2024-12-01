@@ -1,4 +1,3 @@
-import React from "react";
 import "../componets/apartadovisual/footer.css";
 
 const Footer = () => {

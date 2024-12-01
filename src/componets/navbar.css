@@ -1,7 +1,11 @@
-
 #navbar {
   padding: 20px;
   background-color: #007BFF;
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  justify-content: space-between;
+  gap: 15px;
 }
 
 
@@ -94,4 +98,24 @@ button.btn-outline-light:hover {
 
 .navbar .navbar-nav.ml-auto {
   margin-left: auto; 
+}
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #f7f7f7;
+  border-radius: 5px;
+  flex-wrap: wrap;
+}
+
+.search-results li{
+  padding: 5px;
+}
+
+.search-results ul {
+  list-style: none;
 }

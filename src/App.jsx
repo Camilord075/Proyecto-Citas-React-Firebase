@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import { useState } from "react";
 import Inicio from "./pages/inicio";
 import Login from "./pages/Login";
 import Admin from "./pages/admin";
